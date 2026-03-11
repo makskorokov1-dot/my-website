@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>Форчан-подобный сайт</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+  }
+  h1 {
+    text-align: center;
+    color: #2c3e50;
+  }
+  /* Блок входа */
+#login-section {
+  max-width: 400px;
+  margin: 0 auto 20px auto;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+#login-section input {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+#login-section button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #2980b9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+#login-section button:hover {
+  background-color: #3498db;
+}
+
+/* Информация о пользователе */
+#user-info {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.2em;
+  color: #2c3e50;
+}
+#user-info button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #7f8c8d;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+#user-info button:hover {
+  background-color: #95a5a6;
+}
+
+/* Остальные стили из предыдущего примера */
+.thread {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 15px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+.thread:hover {
+  background-color: #ecf0f1;
+  transform: translateY(-2px);
+}
+.thread-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #34495e;
+}
+
+#new-thread-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-width: 600px;
+  margin: 0 auto 30px auto;
+}
+#new-thread-form input,
+#new-thread-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+#new-thread-form button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #2980b9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+#new-thread-form button:hover {
+  background-color: #3498db;
+}
+
+#thread-details {
+  max-width: 700px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+#thread-details h2 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+#thread-details p {
+  font-size: 1.1em;
+  line-height: 1.5;
+}
+#replies {
+  list-style: none;
+  padding: 0;
+}
+#replies li {
+  background-color: #ecf0f1;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+#reply-section textarea {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  font-family: Arial, sans-serif;
+  font-size: 1em;
+}
+#reply-section button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+#reply-section button:hover {
+  background-color: #2ecc71;
+}
+button.back {
+  background-color: #7f8c8d;
+}
+button.back:hover {
+  background-color: #95a5a6;
+}
+</style>
+</head>
+<body>
+
+<h1>Форчан-подобный сайт</h1>
+
+<!-- Блок авторизации -->
+<div id="login-section">
+  <h2>Вход на форум</h2>
+  <input type="text" id="username" placeholder="Введите имя" />
+  <input type="password" id="password" placeholder="Введите пароль" />
+  <button onclick="login()">Войти</button>
+</div>
+
+<!-- Информация о пользователе -->
+<div id="user-info" style="display:none;">
+  Вы вошли как: <span id="user-name"></span>
+  <button onclick="logout()">Выйти</button>
+</div>
+
+<!-- Основной контент -->
+<div id="main-content" style="display:none;">
+
+<!-- Создание темы -->
+<div id="new-thread-form">
+  <h2>Создать новую тему</h2>
+  <input type="text" id="newTitle" placeholder="Заголовок" required />
+  <textarea id="newContent" placeholder="Содержание" required></textarea>
+  <button onclick="createThread()">Опубликовать</button>
+</div>
+
+<!-- Список тем -->
+<ul id="threads"></ul>
+
+<!-- Детали темы -->
+<div id="thread-details" style="display:none;">
+  <button class="back" onclick="backToList()">⬅️ Назад к списку</button>
+  <h2 id="thread-title"></h2>
+  <p id="thread-content"></p>
+  <h3>Ответы</h3>
+  <ul id="replies"></ul>
+  <div id="reply-section">
+    <h4>Добавить ответ</h4>
+    <textarea id="replyContent"></textarea>
+    <button onclick="addReply()">Отправить</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+let threads = [];
+let currentThreadIndex = null;
+let currentUser = null;
+let users = {}; // объект для хранения паролей: {имя: пароль}
+
+// Вход пользователя
+function login() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  if (username && password) {
+    // Проверка: если пользователь уже есть, сверяем пароль
+    if (users[username]) {
+      if (users[username] === password) {
+        // успешно
+        currentUser = username;
+        initUser();
+      } else {
+        alert('Неверный пароль');
+        return;
+      }
+    } else {
+      // новый пользователь, сохраняем
+      users[username] = password;
+      currentUser = username;
+      initUser();
+    }
+  } else {
+    alert('Пожалуйста, введите имя и пароль');
+  }
+}
+
+function initUser() {
+  document.getElementById('user-name').innerText = currentUser;
+  document.getElementById('login-section').style.display = 'none';
+  document.getElementById('user-info').style.display = 'block';
+  document.getElementById('main-content').style.display = 'block';
+}
+
+// Выход пользователя
+function logout() {
+  currentUser = null;
+  document.getElementById('login-section').style.display = 'block';
+  document.getElementById('user-info').style.display = 'none';
+  document.getElementById('main-content').style.display = 'none';
+}
+
+// Создание новой темы
+function createThread() {
+  if (!currentUser) {
+    alert('Пожалуйста, войдите в систему');
+    return;
+  }
+  const title = document.getElementById('newTitle').value.trim();
+  const content = document.getElementById('newContent').value.trim();
+  if (title && content) {
+    threads.push({ title: title, content: content, replies: [], author: currentUser });
+    document.getElementById('newTitle').value = '';
+    document.getElementById('newContent').value = '';
+    renderThreads();
+  } else {
+    alert('Пожалуйста, заполните все поля');
+  }
+}
+
+// Отрисовка списка тем
+function renderThreads() {
+  const list = document.getElementById('threads');
+  list.innerHTML = '';
+  threads.forEach((thread, index) => {
+    const li = document.createElement('li');
+    li.className = 'thread';
+    li.innerHTML = `<div class="thread-title" onclick="viewThread(${index})">${thread.title} <small style="color:#777;">(Автор: ${thread.author})</small></div>`;
+    list.appendChild(li);
+  });
+}
+
+// Просмотр темы
+function viewThread(index) {
+  currentThreadIndex = index;
+  const thread = threads[index];
+  document.getElementById('thread-title').innerText = thread.title;
+  document.getElementById('thread-content').innerText = thread.content;
+  const repliesList = document.getElementById('replies');
+  repliesList.innerHTML = '';
+  thread.replies.forEach(reply => {
+    const li = document.createElement('li');
+    li.innerText = reply.text + ` — ${reply.author}`;
+    repliesList.appendChild(li);
+  });
+  document.getElementById('thread-details').style.display = 'block';
+  document.getElementById('new-thread-form').style.display = 'none';
+}
+
+// Добавление ответа
+function addReply() {
+  const replyText = document.getElementById('replyContent').value.trim();
+  if (replyText && currentThreadIndex !== null && currentUser) {
+    threads[currentThreadIndex].replies.push({ text: replyText, author: currentUser });
+    document.getElementById('replyContent').value = '';
+    viewThread(currentThreadIndex);
+  } else {
+    alert('Введите ответ и убедитесь, что вы вошли в систему');
+  }
+}
+
+// Возврат к списку тем
+function backToList() {
+  document.getElementById('thread-details').style.display = 'none';
+  document.getElementById('new-thread-form').style.display = 'block';
+}
+
+// Инициализация
+renderThreads();
+</script>
+
+</body>
+</html>
